@@ -60,7 +60,7 @@
   .add-item-row select, .add-item-row input{
     padding:9px; border:1px solid var(--line); border-radius:8px; font-size:0.9rem;
   }
-  .add-item-row select{flex:1; min-width:220px;}
+  .add-item-row select{flex:1; min-width:180px;}
   .add-item-row input[type=number]{width:70px;}
   .add-item-row button{
     background:var(--purple); color:#fff; border:none; padding:9px 16px; border-radius:8px;
@@ -123,6 +123,7 @@
 
     <div class="add-item-row">
       <select id="itemSelect"></select>
+      <select id="colorSelect" disabled></select>
       <input type="number" id="itemQty" value="1" min="1">
       <button type="button" id="addItemBtn">Add Item</button>
     </div>
@@ -247,6 +248,13 @@ function fmtPrice(n){ return "$" + n.toFixed(2); }
 /* Populate the manual-add dropdown */
 function populateSelect(){
   const sel = document.getElementById("itemSelect");
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = "-- Select an item --";
+  placeholder.disabled = true;
+  placeholder.selected = true;
+  sel.appendChild(placeholder);
+
   const groups = {};
   PRODUCTS.forEach(p => {
     if(!groups[p.category]) groups[p.category] = [];
@@ -258,11 +266,30 @@ function populateSelect(){
     groups[cat].forEach(p => {
       const opt = document.createElement("option");
       opt.value = p.item;
-      opt.textContent = p.name + " — " + fmtPrice(p.price) + (p.colors.length > 1 ? " (" + p.colors.join("/") + ")" : "");
+      opt.textContent = p.name + " — " + fmtPrice(p.price);
       og.appendChild(opt);
     });
     sel.appendChild(og);
   });
+
+  sel.addEventListener("change", () => populateColorSelect(sel.value));
+}
+
+function populateColorSelect(itemNo){
+  const colorSel = document.getElementById("colorSelect");
+  colorSel.innerHTML = "";
+  const p = findProduct(itemNo);
+  if(!p){
+    colorSel.disabled = true;
+    return;
+  }
+  p.colors.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.textContent = c;
+    colorSel.appendChild(opt);
+  });
+  colorSel.disabled = false;
 }
 
 function findProduct(itemNo){
@@ -332,8 +359,10 @@ function renderOrder(){
 
 document.getElementById("addItemBtn").addEventListener("click", () => {
   const itemNo = document.getElementById("itemSelect").value;
+  const color = document.getElementById("colorSelect").value;
   const qty = Math.max(1, parseInt(document.getElementById("itemQty").value) || 1);
-  if(itemNo) addManualItem(itemNo, qty);
+  if(!itemNo) return;
+  addManualItem(itemNo, qty, color);
   document.getElementById("itemQty").value = 1;
 });
 
