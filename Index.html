@@ -1,1 +1,706 @@
-Index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grundeez — Wildly Different Apparel</title>
+<meta name="description" content="Grundeez — quirky, mystical, all-over-print apparel for kids, men and women. Hippie Mouse, Hekate, Faerie, Shakti and more.">
+<style>
+  :root{
+    --purple:#6b21a8;
+    --purple-dark:#4c1d78;
+    --purple-light:#a855f7;
+    --ink:#1a1220;
+    --paper:#faf7fc;
+    --card:#ffffff;
+    --gold:#d4a017;
+    --line:#e6dcf0;
+    --radius:16px;
+    --shadow:0 6px 20px rgba(80,30,120,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  h1,h2,h3{font-family:Georgia, 'Times New Roman', serif; margin:0;}
+  a{color:inherit;text-decoration:none;}
+
+  /* NAV */
+  .navbar{
+    position:sticky; top:0; z-index:50;
+    background:var(--purple-dark);
+    color:#fff;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 24px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.2);
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .brand{font-size:1.5rem; font-weight:bold; letter-spacing:1px; color:#fff;}
+  .brand span{color:var(--gold);}
+  .nav-links{display:flex; gap:18px; flex-wrap:wrap; align-items:center;}
+  .nav-links a{font-size:0.95rem; font-weight:600; padding:6px 4px; border-bottom:2px solid transparent; transition:.2s;}
+  .nav-links a:hover{border-bottom:2px solid var(--gold);}
+  .cart-btn{
+    background:var(--gold); color:var(--ink); border:none; border-radius:24px;
+    padding:8px 16px; font-weight:700; cursor:pointer; font-size:0.95rem;
+    display:flex; align-items:center; gap:6px;
+  }
+  .cart-count{
+    background:var(--purple-dark); color:#fff; border-radius:50%;
+    width:22px; height:22px; display:inline-flex; align-items:center; justify-content:center;
+    font-size:0.75rem;
+  }
+
+  /* HERO */
+  .hero{
+    background:linear-gradient(135deg, var(--purple) 0%, var(--purple-dark) 100%);
+    color:#fff; text-align:center; padding:60px 20px 50px;
+  }
+  .hero h1{font-size:2.6rem; margin-bottom:10px;}
+  .hero p{font-size:1.15rem; max-width:640px; margin:0 auto; opacity:0.92;}
+  .hero .tagline{color:var(--gold); font-weight:bold; letter-spacing:2px; text-transform:uppercase; font-size:0.85rem; margin-bottom:14px; display:block;}
+
+  /* SECTION */
+  .section{padding:50px 20px 20px; max-width:1280px; margin:0 auto;}
+  .section-title{
+    font-size:2rem; text-align:center; margin-bottom:6px; color:var(--purple-dark);
+  }
+  .section-sub{text-align:center; color:#7a6a85; margin-bottom:34px; font-size:0.95rem;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(270px, 1fr));
+    gap:28px;
+  }
+
+  /* CARD */
+  .card{
+    background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+    overflow:hidden; display:flex; flex-direction:column;
+    border:1px solid var(--line);
+  }
+  .card-main-img{
+    width:100%; aspect-ratio:1/1; object-fit:cover; cursor:zoom-in;
+    display:block; background:#f0eaf5;
+  }
+  .thumb-row{
+    display:flex; gap:6px; padding:8px; background:#f4eff8;
+  }
+  .thumb{
+    width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:8px;
+    cursor:pointer; border:2px solid transparent; opacity:0.75; transition:.15s;
+  }
+  .thumb:hover, .thumb.active{opacity:1; border-color:var(--purple);}
+  .card-body{padding:16px 18px 18px; display:flex; flex-direction:column; gap:8px; flex:1;}
+  .card-title{font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.3;}
+  .card-item{font-size:0.78rem; color:#9384a0; letter-spacing:0.5px;}
+  .card-price{font-size:1.25rem; font-weight:800; color:var(--purple-dark);}
+  .swatch-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:4px 0;}
+  .swatch{
+    width:22px; height:22px; border-radius:50%; border:2px solid #fff;
+    box-shadow:0 0 0 1px #ccc; cursor:pointer; position:relative;
+  }
+  .swatch.selected{box-shadow:0 0 0 2px var(--purple);}
+  .swatch-label{font-size:0.78rem; color:#6a5a76; min-width:100%; margin-bottom:-2px;}
+  .qty-row{display:flex; align-items:center; gap:10px; margin-top:auto;}
+  .qty-row label{font-size:0.85rem; color:#6a5a76;}
+  .qty-row input{
+    width:54px; padding:6px; border:1px solid var(--line); border-radius:8px; text-align:center;
+  }
+  .add-btn{
+    margin-top:10px; background:var(--purple); color:#fff; border:none;
+    padding:11px; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.95rem;
+    transition:.15s;
+  }
+  .add-btn:hover{background:var(--purple-dark);}
+  .add-btn.added{background:#2f9e44;}
+
+  /* CART SIDEBAR */
+  .cart-overlay{
+    position:fixed; inset:0; background:rgba(20,10,30,0.45); z-index:98;
+    display:none;
+  }
+  .cart-overlay.open{display:block;}
+  .cart-sidebar{
+    position:fixed; top:0; right:-400px; width:380px; max-width:92vw; height:100%;
+    background:#fff; z-index:99; box-shadow:-8px 0 24px rgba(0,0,0,0.2);
+    transition:right .3s ease; display:flex; flex-direction:column;
+  }
+  .cart-sidebar.open{right:0;}
+  .cart-header{
+    padding:18px 20px; background:var(--purple-dark); color:#fff;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .cart-header h3{font-family:inherit; font-size:1.2rem;}
+  .cart-close{background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer; line-height:1;}
+  .cart-items{flex:1; overflow-y:auto; padding:14px 18px;}
+  .cart-item{
+    display:flex; gap:10px; padding:10px 0; border-bottom:1px solid var(--line);
+  }
+  .cart-item img{width:56px; height:56px; object-fit:cover; border-radius:8px;}
+  .cart-item-info{flex:1;}
+  .cart-item-info .name{font-weight:700; font-size:0.9rem;}
+  .cart-item-info .meta{font-size:0.78rem; color:#8a7a96;}
+  .cart-item-remove{background:none; border:none; color:#c0392b; cursor:pointer; font-size:0.8rem;}
+  .cart-empty{text-align:center; color:#9384a0; padding:40px 10px;}
+  .cart-footer{padding:16px 20px; border-top:1px solid var(--line);}
+  .cart-total{display:flex; justify-content:space-between; font-weight:800; font-size:1.15rem; margin-bottom:12px;}
+  .checkout-btn{
+    width:100%; background:var(--gold); color:var(--ink); border:none; padding:13px;
+    border-radius:10px; font-weight:800; font-size:1rem; cursor:pointer;
+  }
+  .checkout-btn:hover{opacity:0.9;}
+  .checkout-btn:disabled{opacity:0.5; cursor:not-allowed;}
+
+  /* LIGHTBOX */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(10,5,15,0.92); z-index:200;
+    display:none; align-items:center; justify-content:center; flex-direction:column;
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:88vw; max-height:76vh; border-radius:10px; box-shadow:0 10px 40px rgba(0,0,0,0.5);}
+  .lightbox-thumbs{display:flex; gap:10px; margin-top:16px;}
+  .lightbox-thumbs img{
+    width:64px; height:64px; object-fit:cover; border-radius:8px; cursor:pointer;
+    opacity:0.6; max-width:none; max-height:none; box-shadow:none;
+  }
+  .lightbox-thumbs img.active{opacity:1; outline:2px solid var(--gold);}
+  .lightbox-close{
+    position:absolute; top:20px; right:28px; background:none; border:none;
+    color:#fff; font-size:2.2rem; cursor:pointer;
+  }
+  .lightbox-arrow{
+    position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,0.12);
+    border:none; color:#fff; font-size:2rem; cursor:pointer; padding:10px 16px; border-radius:8px;
+  }
+  .lightbox-arrow.prev{left:16px;}
+  .lightbox-arrow.next{right:16px;}
+  .lightbox-arrow:hover{background:rgba(255,255,255,0.25);}
+
+  /* FOOTER */
+  footer{
+    background:var(--purple-dark); color:#fff; text-align:center; padding:36px 20px 30px; margin-top:60px;
+  }
+  footer p{margin:6px 0; opacity:0.85; font-size:0.9rem;}
+  footer a{color:var(--gold); font-weight:600;}
+
+  @media (max-width:600px){
+    .hero h1{font-size:1.9rem;}
+    .nav-links{gap:12px;}
+    .nav-links a{font-size:0.85rem;}
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="brand">GRUND<span>EEZ</span></div>
+  <div class="nav-links">
+    <a href="#kids">Kids</a>
+    <a href="#mens">Men's</a>
+    <a href="#ladies">Ladies</a>
+    <button class="cart-btn" id="cartToggle">🛒 Cart <span class="cart-count" id="cartCount">0</span></button>
+  </div>
+</nav>
+
+<div class="hero">
+  <span class="tagline">Print-on-demand • Mystical • Wildly Different</span>
+  <h1>Wear Something Unexpected</h1>
+  <p>From hippie mice to Celtic tri-fish, from Hekate lace pajamas to Faerie dreams — Grundeez apparel is designed for people who don't want to look like everyone else.</p>
+</div>
+
+<section class="section" id="kids">
+  <h2 class="section-title">Kids</h2>
+  <p class="section-sub">Soft, playful prints for the little ones</p>
+  <div class="grid" id="grid-kids"></div>
+</section>
+
+<section class="section" id="mens">
+  <h2 class="section-title">Men's</h2>
+  <p class="section-sub">All-over print tees, hoodies &amp; drawstrings</p>
+  <div class="grid" id="grid-mens"></div>
+</section>
+
+<section class="section" id="ladies">
+  <h2 class="section-title">Ladies</h2>
+  <p class="section-sub">Hoodies, crews &amp; lace pajama sets</p>
+  <div class="grid" id="grid-ladies"></div>
+</section>
+
+<footer>
+  <p><strong>GRUNDEEZ</strong> — Wildly Different Apparel</p>
+  <p>All items made to order. Please allow extra time for production &amp; shipping.</p>
+  <p><a href="orderform.html">Go to Order Form →</a></p>
+</footer>
+
+<!-- CART SIDEBAR -->
+<div class="cart-overlay" id="cartOverlay"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Your Cart</h3>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">Your cart is empty.</div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total"><span>Total</span><span id="cartTotal">$0.00</span></div>
+    <button class="checkout-btn" id="checkoutBtn" disabled>Proceed to Order Form</button>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <button class="lightbox-arrow prev" id="lightboxPrev">&#8249;</button>
+  <img id="lightboxImg" src="" alt="">
+  <button class="lightbox-arrow next" id="lightboxNext">&#8250;</button>
+  <div class="lightbox-thumbs" id="lightboxThumbs"></div>
+</div>
+
+<script>
+/* ===================== PRODUCT CATALOG ===================== */
+const PRODUCTS = [
+  // KIDS
+  { category:"Kids", item:"AA-HMIR-2026-01", name:"Hippie Mouse Infant Romper",
+    colors:["Purple","Black","Royal Navy","White"], price:10.91,
+    images:[
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260701/6a4537970be493_82398094_22317.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260701/6a45388e3c8960_41277929_20292.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260701/6a4536b7b86ea1_99520761_94805.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260701/6a453729babb35_12365124_23491.jpg"
+    ]},
+  { category:"Kids", item:"AA-HMCP-2026-02", name:"Hippie Mouse Children's Pajama Pants",
+    colors:["Purple","Black","Burgundy","Royal Navy"], price:13.95,
+    images:[
+      "https://cdn.sdspod.com/out/2538/202607/8726f0e073f5a327da11799505270fd3.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/fa0a64e588d48d8545e421b04a7805fb.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/562dd56d8bd7d6b7b21a92fc48e7fa86.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/b6f14e0df37e05595ecacd488609b861.jpg"
+    ]},
+  { category:"Kids", item:"AACCPJ-2026-03", name:"Catitude Children's Pajama Pants",
+    colors:["Black","Red","Yellow","Royal Navy"], price:14.88,
+    images:[
+      "https://cdn.sdspod.com/out/2538/202607/7aed51d4292fcbcc19484ea70a119f03.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/6654d1d6c753efda4a059d30cef24042.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/279623158791c773a55c1864afa92b92.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/5c9d7e393c13217ffe77a1c00f81f69a.jpg"
+    ]},
+
+  // MENS
+  { category:"Mens", item:"AA-FUMT-2026-04", name:"FunknUncle All Over Print Tee",
+    colors:["Black"], price:11.34,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/8abe9fbe2ad8864a818fdfca748764bc.jpg",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/99243113e880bc7d73d9f207575d4975.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/1f883ab4126006fa00291bd962417573.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/ad8323c1403315e0aca804a485ec441c.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Mens", item:"AA-KPMT-2026-05", name:"KingPrint All Over Print T",
+    colors:["Black"], price:11.34,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/607be45a43129ff7eea842f3d61f5dd2.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/e1cf451757b1ea6024c8856c1e6e13a7.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/4dfde1b0d1df906d01da1dbda58a773e.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/d97bbd898ac31405bca7f5b6cb7c30a1.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Mens", item:"AA_TCMT-2026-06", name:"Tri-Celt-Fish New All Over Print T",
+    colors:["Black"], price:15.12,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/184498c2be4d03654b4b9ac2f148cbf5.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/f87e033319dbc5d89539f6ce602a188e.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/062ee665634cb41d9896be4a85fb09ef.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/409ed9b479c421c56d84f1241b18caec.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Mens", item:"AA-HMMH-2026-07", name:"Hippie Mouse Men's Hoodie",
+    colors:["Black"], price:16.59,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/c37fed6ba0638cbf21fa441330463498.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/4351ddb4f75a364dbda8297c623583c3.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/68e0be82467ee9fd7d0e4bb02cc28a62.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/708b39a72759776bd8f6224d7e759d62.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Mens", item:"AA-OCMH-2026-08", name:"OctoCelt All Over Print Hoodie",
+    colors:["Black"], price:21.00,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/8fe9d28f4dc85d79c5c179fa8c45fa02.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/f4dad80836969ee7cfa428622e8f1408.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/fb6a2bd5e69be86ecdf1a0697ffcd002.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/fe378aae81a38fe2b5069e9689b43a6e.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Mens", item:"AA-OCMD-2026-09", name:"OctoCelt Men's Front Half Drawstring",
+    colors:["Black"], price:15.72,
+    images:[
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a453e016fc825_30711971_82138.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a453e01704b38_14831820_69228.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a453e0170d078_53125914_25289.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a453e01714067_41861107_12932.jpg"
+    ]},
+
+  // LADIES
+  { category:"Ladies", item:"AA-HMAH-2026-10", name:"Hippie Mouse Asymmetrical Hem T-Shirt",
+    colors:["White","Black","Purple","Green"], price:12.97,
+    images:[
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454d6c2529c7_18262522_57868.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454e0ed62231_29251771_71169.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454f23d29c44_40144525_73621.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454fee111579_52027270_66272.jpg"
+    ]},
+  { category:"Ladies", item:"AA-HMEH-2026-11", name:"Hippie Mouse Eared Hoodie",
+    colors:["White/Black","White/Red"], price:20.28,
+    images:[
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=eccbb26698c1a5bfcf855cec037c6139",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=22676c6ab82d832e47e00287fb311700",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=cec73e722b1494494ec2b529bf8971ec",
+      "https://cdn.sdspod.com/images/91rr3AHARTasVhdqqVyNm4TGH9ub5wHb8VhZiE45/ae9e23d4bd3ca25552e1ac241704ba2a.jpg"
+    ]},
+  { category:"Ladies", item:"AA-MAPH-2026-12", name:"Make Art All Over Print Hoodie",
+    colors:["Black"], price:19.95,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/ac5b44c0594e7cb32998195276de5594.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/33b548a2194906571013c37192dc8497.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/0d29d3682d4a8b44b33b215346a35cfb.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/c795e7b795588dd46dec7fd5b4c84da5.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Ladies", item:"AA-CAPH-2026-13", name:"Catgirl Attitude All Over Print Hoodie",
+    colors:["Black"], price:19.95,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/d512e3cf5eddf5ad428209a79eec6f8f.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/501b6e377b552bb01aca1a695cf11dd1.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/2ded9e4dca8b0254229ba6598d9da688.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/f2c4a83fc244de2cdc57157926221200.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Ladies", item:"AA-LAPH-2026-14", name:"Lizard Attitude All Over Print Hoodie",
+    colors:["Black"], price:19.95,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/c8bbf9f29d85baaf47fcc3b101818020.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/29deb53e2380c217972dc71f5e2f16aa.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/693812460aef79177ea847549a152069.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/dad893cfe4c6d77caa685369ae6242af.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Ladies", item:"AA-GZPT-2026-15", name:"GrooveZonz Women's All Over Print Crew",
+    colors:["Black"], price:10.83,
+    images:[
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/4eede5ebae19bd60e3d2042098309016.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/06024c5f19634ccffe6a146d2adc0288.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/57288d52c38ddf8962981c7ee7b17971.jpg?x-oss-process=image/resize,w_500,h_500",
+      "https://us-design-0001.oss-accelerate.aliyuncs.com/31e83d42e871a246bbd732a61195f355.jpg?x-oss-process=image/resize,w_500,h_500"
+    ]},
+  { category:"Ladies", item:"AA-SLPJ-2026-16", name:"Shakti Women's Lace Pajama Set",
+    colors:["Black"], price:16.99,
+    images:[
+      "https://cdn.sdspod.com/out/2538/202607/974a2cf4ac06ee034914d675cb27cd59.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/34f59e16af00528349ff4260607f64c1.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/2f761f07974ad4c6febfeaec65d7d21c.jpg",
+      "https://cdn.sdspod.com/out/2538/202607/cc0b85d67efe5459f44fa3ac42e56a96.jpg"
+    ]},
+  { category:"Ladies", item:"AA-FLPJ-2026-17", name:"Faerie Women's Lace Pajama Set",
+    colors:["Black"], price:16.99,
+    images:[
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=651489038b6435dde7c53084d18eef3f",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=611e88810205b84aa78dd36ea46043d0",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=609cdce11ac4df920a2b7bbf798ea8da",
+      "https://cdn.sdspod.com/images/91rr3AHARTasVhdqqVyNm4TGH9ub5wHb8VhZiE45/54146aee127ea229d524e26d19a580a3.jpg"
+    ]},
+  { category:"Ladies", item:"AA-HLPJ-2026-18", name:"Hekate Women's Lace Pajama Set",
+    colors:["Black"], price:16.99,
+    images:[
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=ef341af6494dcb32ce36772997d22a4c",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=5071f35c4b747105bd699c7dad635e1f",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=50e786171f1df56ace35757f0701e642",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=4bc8e8276f2ade16f21d4ac9e7e961ed"
+    ]}
+];
+
+/* Expose catalog for orderform.html handoff / debugging */
+window.GRUNDEEZ_PRODUCTS = PRODUCTS;
+
+const COLOR_MAP = {
+  "Purple":"#7c3aed",
+  "Black":"#1a1a1a",
+  "Royal Navy":"#1e3a8a",
+  "White":"#f5f5f5",
+  "Burgundy":"#800020",
+  "Red":"#dc2626",
+  "Yellow":"#eab308",
+  "Green":"#16a34a",
+  "White/Black":"linear-gradient(90deg,#f5f5f5 50%,#1a1a1a 50%)",
+  "White/Red":"linear-gradient(90deg,#f5f5f5 50%,#dc2626 50%)"
+};
+
+/* ===================== CART STATE ===================== */
+let CART = [];
+
+function fmtPrice(n){ return "$" + n.toFixed(2); }
+
+function buildCard(p, idx){
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const mainImg = document.createElement("img");
+  mainImg.className = "card-main-img";
+  mainImg.src = p.images[0];
+  mainImg.alt = p.name;
+  mainImg.dataset.idx = 0;
+  mainImg.addEventListener("click", () => openLightbox(p, parseInt(mainImg.dataset.idx)));
+  card.appendChild(mainImg);
+
+  const thumbRow = document.createElement("div");
+  thumbRow.className = "thumb-row";
+  p.images.forEach((src, i) => {
+    const t = document.createElement("img");
+    t.className = "thumb" + (i === 0 ? " active" : "");
+    t.src = src;
+    t.alt = p.name + " view " + (i+1);
+    t.addEventListener("click", () => {
+      mainImg.src = src;
+      mainImg.dataset.idx = i;
+      thumbRow.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
+      t.classList.add("active");
+    });
+    thumbRow.appendChild(t);
+  });
+  card.appendChild(thumbRow);
+
+  const body = document.createElement("div");
+  body.className = "card-body";
+
+  const title = document.createElement("div");
+  title.className = "card-title";
+  title.textContent = p.name;
+  body.appendChild(title);
+
+  const itemNo = document.createElement("div");
+  itemNo.className = "card-item";
+  itemNo.textContent = "Item #" + p.item;
+  body.appendChild(itemNo);
+
+  const price = document.createElement("div");
+  price.className = "card-price";
+  price.textContent = fmtPrice(p.price);
+  body.appendChild(price);
+
+  let selectedColor = p.colors[0];
+  if(p.colors.length > 1){
+    const label = document.createElement("div");
+    label.className = "swatch-label";
+    label.textContent = "Color: " + selectedColor;
+    body.appendChild(label);
+
+    const swatchRow = document.createElement("div");
+    swatchRow.className = "swatch-row";
+    p.colors.forEach((c, i) => {
+      const sw = document.createElement("div");
+      sw.className = "swatch" + (i === 0 ? " selected" : "");
+      sw.title = c;
+      sw.style.background = COLOR_MAP[c] || "#ccc";
+      sw.addEventListener("click", () => {
+        selectedColor = c;
+        label.textContent = "Color: " + c;
+        swatchRow.querySelectorAll(".swatch").forEach(el => el.classList.remove("selected"));
+        sw.classList.add("selected");
+      });
+      swatchRow.appendChild(sw);
+    });
+    body.appendChild(swatchRow);
+  }
+
+  const qtyRow = document.createElement("div");
+  qtyRow.className = "qty-row";
+  const qtyLabel = document.createElement("label");
+  qtyLabel.textContent = "Qty:";
+  const qtyInput = document.createElement("input");
+  qtyInput.type = "number";
+  qtyInput.min = "1";
+  qtyInput.value = "1";
+  qtyRow.appendChild(qtyLabel);
+  qtyRow.appendChild(qtyInput);
+  body.appendChild(qtyRow);
+
+  const addBtn = document.createElement("button");
+  addBtn.className = "add-btn";
+  addBtn.textContent = "Add to Cart";
+  addBtn.addEventListener("click", () => {
+    const qty = Math.max(1, parseInt(qtyInput.value) || 1);
+    addToCart(p, selectedColor, qty, mainImg.src);
+    addBtn.textContent = "Added ✓";
+    addBtn.classList.add("added");
+    setTimeout(() => {
+      addBtn.textContent = "Add to Cart";
+      addBtn.classList.remove("added");
+    }, 1200);
+  });
+  body.appendChild(addBtn);
+
+  card.appendChild(body);
+  return card;
+}
+
+function renderCatalog(){
+  const grids = {
+    Kids: document.getElementById("grid-kids"),
+    Mens: document.getElementById("grid-mens"),
+    Ladies: document.getElementById("grid-ladies")
+  };
+  PRODUCTS.forEach((p, idx) => {
+    const grid = grids[p.category];
+    if(grid) grid.appendChild(buildCard(p, idx));
+  });
+}
+
+/* ===================== CART LOGIC ===================== */
+function addToCart(p, color, qty, image){
+  const key = p.item + "|" + color;
+  const existing = CART.find(c => c.key === key);
+  if(existing){
+    existing.qty += qty;
+  } else {
+    CART.push({
+      key,
+      item: p.item,
+      name: p.name,
+      color,
+      price: p.price,
+      qty,
+      image
+    });
+  }
+  renderCart();
+  openCart();
+}
+
+function removeFromCart(key){
+  CART = CART.filter(c => c.key !== key);
+  renderCart();
+}
+
+function cartTotal(){
+  return CART.reduce((sum, c) => sum + c.price * c.qty, 0);
+}
+
+function renderCart(){
+  const itemsEl = document.getElementById("cartItems");
+  const countEl = document.getElementById("cartCount");
+  const totalEl = document.getElementById("cartTotal");
+  const checkoutBtn = document.getElementById("checkoutBtn");
+
+  itemsEl.innerHTML = "";
+  if(CART.length === 0){
+    itemsEl.innerHTML = '<div class="cart-empty">Your cart is empty.</div>';
+    checkoutBtn.disabled = true;
+  } else {
+    CART.forEach(c => {
+      const row = document.createElement("div");
+      row.className = "cart-item";
+      row.innerHTML = `
+        <img src="${c.image}" alt="${c.name}">
+        <div class="cart-item-info">
+          <div class="name">${c.name}</div>
+          <div class="meta">${c.color} • Qty ${c.qty} • ${fmtPrice(c.price)} ea</div>
+          <button class="cart-item-remove" data-key="${c.key}">Remove</button>
+        </div>
+      `;
+      itemsEl.appendChild(row);
+    });
+    itemsEl.querySelectorAll(".cart-item-remove").forEach(btn => {
+      btn.addEventListener("click", () => removeFromCart(btn.dataset.key));
+    });
+    checkoutBtn.disabled = false;
+  }
+
+  const totalCount = CART.reduce((sum, c) => sum + c.qty, 0);
+  countEl.textContent = totalCount;
+  totalEl.textContent = fmtPrice(cartTotal());
+}
+
+function openCart(){
+  document.getElementById("cartSidebar").classList.add("open");
+  document.getElementById("cartOverlay").classList.add("open");
+}
+function closeCart(){
+  document.getElementById("cartSidebar").classList.remove("open");
+  document.getElementById("cartOverlay").classList.remove("open");
+}
+
+document.getElementById("cartToggle").addEventListener("click", openCart);
+document.getElementById("cartClose").addEventListener("click", closeCart);
+document.getElementById("cartOverlay").addEventListener("click", closeCart);
+
+document.getElementById("checkoutBtn").addEventListener("click", () => {
+  try{
+    sessionStorage.setItem("grundeez_cart", JSON.stringify(CART));
+  }catch(e){}
+  window.location.href = "orderform.html";
+});
+
+/* ===================== LIGHTBOX ===================== */
+let lbProduct = null;
+let lbIndex = 0;
+
+function openLightbox(p, startIdx){
+  lbProduct = p;
+  lbIndex = startIdx || 0;
+  renderLightbox();
+  document.getElementById("lightbox").classList.add("open");
+}
+function closeLightbox(){
+  document.getElementById("lightbox").classList.remove("open");
+  lbProduct = null;
+}
+function renderLightbox(){
+  if(!lbProduct) return;
+  document.getElementById("lightboxImg").src = lbProduct.images[lbIndex];
+  document.getElementById("lightboxImg").alt = lbProduct.name;
+  const thumbsEl = document.getElementById("lightboxThumbs");
+  thumbsEl.innerHTML = "";
+  lbProduct.images.forEach((src, i) => {
+    const t = document.createElement("img");
+    t.src = src;
+    t.className = i === lbIndex ? "active" : "";
+    t.addEventListener("click", () => { lbIndex = i; renderLightbox(); });
+    thumbsEl.appendChild(t);
+  });
+}
+document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+document.getElementById("lightboxPrev").addEventListener("click", () => {
+  if(!lbProduct) return;
+  lbIndex = (lbIndex - 1 + lbProduct.images.length) % lbProduct.images.length;
+  renderLightbox();
+});
+document.getElementById("lightboxNext").addEventListener("click", () => {
+  if(!lbProduct) return;
+  lbIndex = (lbIndex + 1) % lbProduct.images.length;
+  renderLightbox();
+});
+document.getElementById("lightbox").addEventListener("click", (e) => {
+  if(e.target.id === "lightbox") closeLightbox();
+});
+document.addEventListener("keydown", (e) => {
+  if(!document.getElementById("lightbox").classList.contains("open")) return;
+  if(e.key === "Escape") closeLightbox();
+  if(e.key === "ArrowLeft") document.getElementById("lightboxPrev").click();
+  if(e.key === "ArrowRight") document.getElementById("lightboxNext").click();
+});
+
+/* ===================== INIT ===================== */
+renderCatalog();
+renderCart();
+
+/* Restore cart if user came back from order form */
+try{
+  const saved = sessionStorage.getItem("grundeez_cart");
+  if(saved){
+    const parsed = JSON.parse(saved);
+    if(Array.isArray(parsed) && parsed.length){
+      CART = parsed;
+      renderCart();
+    }
+  }
+}catch(e){}
+</script>
+</body>
+</html>
