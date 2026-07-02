@@ -83,22 +83,44 @@
     overflow:hidden; display:flex; flex-direction:column;
     border:1px solid var(--line);
   }
-  .card-main-img{
-    width:100%; aspect-ratio:1/1; object-fit:cover; cursor:zoom-in;
-    display:block; background:#f0eaf5;
+  .gallery{
+    position:relative; width:100%; aspect-ratio:1/1; background:#f0eaf5;
+    overflow:hidden;
   }
+  .card-main-img{
+    width:100%; height:100%; object-fit:cover; cursor:zoom-in;
+    display:block;
+  }
+  .gallery-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    background:rgba(255,255,255,0.85); border:none; color:var(--purple-dark);
+    font-size:1.3rem; width:32px; height:32px; border-radius:50%; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+    box-shadow:0 2px 6px rgba(0,0,0,0.15); opacity:0; transition:.15s;
+  }
+  .gallery:hover .gallery-arrow{opacity:1;}
+  .gallery-arrow.prev{left:8px;}
+  .gallery-arrow.next{right:8px;}
+  .gallery-arrow:hover{background:#fff;}
   .thumb-row{
     display:flex; gap:6px; padding:8px; background:#f4eff8;
+    justify-content:center;
   }
   .thumb{
-    width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:8px;
+    width:44px; height:44px; flex:0 0 44px; object-fit:cover; border-radius:8px;
     cursor:pointer; border:2px solid transparent; opacity:0.75; transition:.15s;
   }
   .thumb:hover, .thumb.active{opacity:1; border-color:var(--purple);}
   .card-body{padding:16px 18px 18px; display:flex; flex-direction:column; gap:8px; flex:1;}
   .card-title{font-size:1.05rem; font-weight:700; color:var(--ink); line-height:1.3;}
   .card-item{font-size:0.78rem; color:#9384a0; letter-spacing:0.5px;}
+  .price-details-row{display:flex; align-items:center; justify-content:space-between; gap:10px;}
   .card-price{font-size:1.25rem; font-weight:800; color:var(--purple-dark);}
+  .details-link{
+    font-size:0.82rem; font-weight:700; color:var(--purple); text-decoration:underline;
+    white-space:nowrap;
+  }
+  .details-link:hover{color:var(--purple-dark);}
   .swatch-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:4px 0;}
   .swatch{
     width:22px; height:22px; border-radius:50%; border:2px solid #fff;
@@ -233,7 +255,7 @@
 
 <footer>
   <p><strong>GRUNDEEZ</strong> — Wildly Different Apparel</p>
-  <p>All items made to order. Please allow extra time for production &amp; shipping.</p>
+  <p>Please allow 30-45 days for delivery — many orders arrive before that.</p>
   <p><a href="orderform.html">Go to Order Form →</a></p>
 </footer>
 
@@ -268,6 +290,7 @@ const PRODUCTS = [
   // KIDS
   { category:"Kids", item:"AA-HMIR-2026-01", name:"Hippie Mouse Infant Romper",
     colors:["Purple","Black","Royal Navy","White"], price:10.91,
+    details:"https://www.artsadd.com/shop/hippie_mouse_purple_infant_romper-7738900.html",
     images:[
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260701/6a4537970be493_82398094_22317.jpg",
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260701/6a45388e3c8960_41277929_20292.jpg",
@@ -276,6 +299,7 @@ const PRODUCTS = [
     ]},
   { category:"Kids", item:"AA-HMCP-2026-02", name:"Hippie Mouse Children's Pajama Pants",
     colors:["Purple","Black","Burgundy","Royal Navy"], price:13.95,
+    details:"https://www.artsadd.com/shop/hippie_mouse_purple_children_s_pajamas_d29p-7738869.html",
     images:[
       "https://cdn.sdspod.com/out/2538/202607/8726f0e073f5a327da11799505270fd3.jpg",
       "https://cdn.sdspod.com/out/2538/202607/fa0a64e588d48d8545e421b04a7805fb.jpg",
@@ -284,16 +308,27 @@ const PRODUCTS = [
     ]},
   { category:"Kids", item:"AACCPJ-2026-03", name:"Catitude Children's Pajama Pants",
     colors:["Black","Red","Yellow","Royal Navy"], price:14.88,
+    details:"https://www.artsadd.com/shop/catitude_black_children_s_pajamas_d31p-7739140.html",
     images:[
       "https://cdn.sdspod.com/out/2538/202607/7aed51d4292fcbcc19484ea70a119f03.jpg",
       "https://cdn.sdspod.com/out/2538/202607/6654d1d6c753efda4a059d30cef24042.jpg",
       "https://cdn.sdspod.com/out/2538/202607/279623158791c773a55c1864afa92b92.jpg",
       "https://cdn.sdspod.com/out/2538/202607/5c9d7e393c13217ffe77a1c00f81f69a.jpg"
     ]},
+  { category:"Kids", item:"AA-MAIR-2026-19", name:"Make Art Infant Romper",
+    colors:["Purple","Black","Royal Navy","White"], price:12.02,
+    details:"https://www.artsadd.com/shop/make_art_purple_baby_short_sleeve_romper-7739493.html",
+    images:[
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a45ef54a0d3c9_11276449_96559.jpg",
+      "https://cdn.sdspod.com/images/91rr3AHARTasVhdqqVyNm4TGH9ub5wHb8VhZiE45/ae9e23d4bd3ca25552e1ac241704ba2a.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a45f04f8dcd31_97824589_48361.jpg",
+      "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a45eea8bfc5c4_61473823_77373.jpg"
+    ]},
 
   // MENS
   { category:"Mens", item:"AA-FUMT-2026-04", name:"FunknUncle All Over Print Tee",
     colors:["Black"], price:11.34,
+    details:"https://www.artsadd.com/shop/funknuncle_all_over_print_t_shirt_for_men_model_t45-7738913.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/8abe9fbe2ad8864a818fdfca748764bc.jpg",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/99243113e880bc7d73d9f207575d4975.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -302,6 +337,7 @@ const PRODUCTS = [
     ]},
   { category:"Mens", item:"AA-KPMT-2026-05", name:"KingPrint All Over Print T",
     colors:["Black"], price:11.34,
+    details:"https://www.artsadd.com/shop/kingprint_all_over_print_t_shirt_for_men_model_t45-7738923.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/607be45a43129ff7eea842f3d61f5dd2.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/e1cf451757b1ea6024c8856c1e6e13a7.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -310,6 +346,7 @@ const PRODUCTS = [
     ]},
   { category:"Mens", item:"AA_TCMT-2026-06", name:"Tri-Celt-Fish New All Over Print T",
     colors:["Black"], price:15.12,
+    details:"https://www.artsadd.com/shop/tri_celt_fish_new_all_over_print_t_shirt_for_men-7738937.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/184498c2be4d03654b4b9ac2f148cbf5.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/f87e033319dbc5d89539f6ce602a188e.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -318,6 +355,7 @@ const PRODUCTS = [
     ]},
   { category:"Mens", item:"AA-HMMH-2026-07", name:"Hippie Mouse Men's Hoodie",
     colors:["Black"], price:16.59,
+    details:"https://www.artsadd.com/shop/hippymouse_all_over_print_hoodie_for_men_usa_size_model_h13-7738943.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/c37fed6ba0638cbf21fa441330463498.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/4351ddb4f75a364dbda8297c623583c3.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -326,6 +364,7 @@ const PRODUCTS = [
     ]},
   { category:"Mens", item:"AA-OCMH-2026-08", name:"OctoCelt All Over Print Hoodie",
     colors:["Black"], price:21.00,
+    details:"https://www.artsadd.com/shop/octocelt_all_over_print_hoodie_for_men_usa_size_model_h13-7738917.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/8fe9d28f4dc85d79c5c179fa8c45fa02.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/f4dad80836969ee7cfa428622e8f1408.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -334,6 +373,7 @@ const PRODUCTS = [
     ]},
   { category:"Mens", item:"AA-OCMD-2026-09", name:"OctoCelt Men's Front Half Drawstring",
     colors:["Black"], price:15.72,
+    details:"https://www.artsadd.com/shop/octocelt_men_s_front_half_drawstring_long_sleeve_t_shirt-7738930.html",
     images:[
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a453e016fc825_30711971_82138.jpg",
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a453e01704b38_14831820_69228.jpg",
@@ -344,22 +384,34 @@ const PRODUCTS = [
   // LADIES
   { category:"Ladies", item:"AA-HMAH-2026-10", name:"Hippie Mouse Asymmetrical Hem T-Shirt",
     colors:["White","Black","Purple","Green"], price:12.97,
+    details:"https://www.artsadd.com/shop/hippie_mouse_black_yellow_women_s_square_neck_asymmetrical_hem_t_shirt-7739003.html",
     images:[
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454d6c2529c7_18262522_57868.jpg",
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454e0ed62231_29251771_71169.jpg",
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454f23d29c44_40144525_73621.jpg",
       "https://www.mszxdz.com/public/tuku/img/ceshi/20260702/6a454fee111579_52027270_66272.jpg"
     ]},
-  { category:"Ladies", item:"AA-HMEH-2026-11", name:"Hippie Mouse Eared Hoodie",
-    colors:["White/Black","White/Red"], price:20.28,
+  { category:"Ladies", item:"AA-HMEH-2026-11", name:"Hippie Mouse Eared Hoodie — White/Black",
+    colors:["White w/Black sleeves"], price:20.28,
+    details:"https://www.artsadd.com/shop/hippie_mouse_white_black_women_s_3_4_sleeve_hoodie-7739212.html",
     images:[
       "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=eccbb26698c1a5bfcf855cec037c6139",
       "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=22676c6ab82d832e47e00287fb311700",
-      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=cec73e722b1494494ec2b529bf8971ec",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=22676c6ab82d832e47e00287fb311700",
+      "https://cdn.sdspod.com/images/91rr3AHARTasVhdqqVyNm4TGH9ub5wHb8VhZiE45/ae9e23d4bd3ca25552e1ac241704ba2a.jpg"
+    ]},
+  { category:"Ladies", item:"AA-HMEH-2026-18", name:"Hippie Mouse Eared Hoodie — White/Red",
+    colors:["White w/Red sleeves"], price:20.28,
+    details:"https://www.artsadd.com/shop/hippie_mouse_white_red_women_s_3_4_sleeve_hoodie-7739214.html",
+    images:[
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=3adb0f5b03b9bdf72b72a6cf185c257e",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=b60543f61964da425564195134dffb72",
+      "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=01b05f1df319549812fe87000ad51ccf",
       "https://cdn.sdspod.com/images/91rr3AHARTasVhdqqVyNm4TGH9ub5wHb8VhZiE45/ae9e23d4bd3ca25552e1ac241704ba2a.jpg"
     ]},
   { category:"Ladies", item:"AA-MAPH-2026-12", name:"Make Art All Over Print Hoodie",
     colors:["Black"], price:19.95,
+    details:"https://www.artsadd.com/shop/make_art_all_over_print_hoodie_for_women_usa_size_model_h13-7739044.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/ac5b44c0594e7cb32998195276de5594.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/33b548a2194906571013c37192dc8497.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -368,6 +420,7 @@ const PRODUCTS = [
     ]},
   { category:"Ladies", item:"AA-CAPH-2026-13", name:"Catgirl Attitude All Over Print Hoodie",
     colors:["Black"], price:19.95,
+    details:"https://www.artsadd.com/shop/catgirl_attitude_all_over_print_hoodie_for_women_usa_size_model_h13-7739047.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/d512e3cf5eddf5ad428209a79eec6f8f.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/501b6e377b552bb01aca1a695cf11dd1.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -376,6 +429,7 @@ const PRODUCTS = [
     ]},
   { category:"Ladies", item:"AA-LAPH-2026-14", name:"Lizard Attitude All Over Print Hoodie",
     colors:["Black"], price:19.95,
+    details:"https://www.artsadd.com/shop/lizard_attitude_all_over_print_hoodie_for_women_usa_size_model_h13-7739057.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/c8bbf9f29d85baaf47fcc3b101818020.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/29deb53e2380c217972dc71f5e2f16aa.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -384,6 +438,7 @@ const PRODUCTS = [
     ]},
   { category:"Ladies", item:"AA-GZPT-2026-15", name:"GrooveZonz Women's All Over Print Crew",
     colors:["Black"], price:10.83,
+    details:"https://www.artsadd.com/shop/groovezonz_women_s_all_over_print_crew_neck_t_shirt_model_t40_2-7739181.html",
     images:[
       "https://us-design-0001.oss-accelerate.aliyuncs.com/4eede5ebae19bd60e3d2042098309016.jpg?x-oss-process=image/resize,w_500,h_500",
       "https://us-design-0001.oss-accelerate.aliyuncs.com/06024c5f19634ccffe6a146d2adc0288.jpg?x-oss-process=image/resize,w_500,h_500",
@@ -392,6 +447,7 @@ const PRODUCTS = [
     ]},
   { category:"Ladies", item:"AA-SLPJ-2026-16", name:"Shakti Women's Lace Pajama Set",
     colors:["Black"], price:16.99,
+    details:"https://www.artsadd.com/shop/shakti_women_s_lace_pajama_sets-7738941.html",
     images:[
       "https://cdn.sdspod.com/out/2538/202607/974a2cf4ac06ee034914d675cb27cd59.jpg",
       "https://cdn.sdspod.com/out/2538/202607/34f59e16af00528349ff4260607f64c1.jpg",
@@ -400,6 +456,7 @@ const PRODUCTS = [
     ]},
   { category:"Ladies", item:"AA-FLPJ-2026-17", name:"Faerie Women's Lace Pajama Set",
     colors:["Black"], price:16.99,
+    details:"https://www.artsadd.com/shop/faerie_women_s_lace_pajama_sets-7739098.html",
     images:[
       "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=651489038b6435dde7c53084d18eef3f",
       "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=611e88810205b84aa78dd36ea46043d0",
@@ -408,6 +465,7 @@ const PRODUCTS = [
     ]},
   { category:"Ladies", item:"AA-HLPJ-2026-18", name:"Hekate Women's Lace Pajama Set",
     colors:["Black"], price:16.99,
+    details:"https://www.artsadd.com/shop/hekate_women_s_lace_pajama_sets-7739096.html",
     images:[
       "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=ef341af6494dcb32ce36772997d22a4c",
       "https://mapi.sdspod.com/tmpImage/2538/shengchengzhong?id=5071f35c4b747105bd699c7dad635e1f",
@@ -441,30 +499,59 @@ function buildCard(p, idx){
   const card = document.createElement("div");
   card.className = "card";
 
+  let currentIdx = 0;
+
+  const gallery = document.createElement("div");
+  gallery.className = "gallery";
+
   const mainImg = document.createElement("img");
   mainImg.className = "card-main-img";
   mainImg.src = p.images[0];
   mainImg.alt = p.name;
-  mainImg.dataset.idx = 0;
-  mainImg.addEventListener("click", () => openLightbox(p, parseInt(mainImg.dataset.idx)));
-  card.appendChild(mainImg);
+  mainImg.addEventListener("click", () => openLightbox(p, currentIdx));
+  gallery.appendChild(mainImg);
+
+  const prevArrow = document.createElement("button");
+  prevArrow.className = "gallery-arrow prev";
+  prevArrow.type = "button";
+  prevArrow.innerHTML = "&#8249;";
+  gallery.appendChild(prevArrow);
+
+  const nextArrow = document.createElement("button");
+  nextArrow.className = "gallery-arrow next";
+  nextArrow.type = "button";
+  nextArrow.innerHTML = "&#8250;";
+  gallery.appendChild(nextArrow);
+
+  card.appendChild(gallery);
 
   const thumbRow = document.createElement("div");
   thumbRow.className = "thumb-row";
+  const thumbEls = [];
+  function setActive(i){
+    currentIdx = i;
+    mainImg.src = p.images[i];
+    thumbEls.forEach((el, j) => el.classList.toggle("active", j === i));
+  }
   p.images.forEach((src, i) => {
     const t = document.createElement("img");
     t.className = "thumb" + (i === 0 ? " active" : "");
     t.src = src;
     t.alt = p.name + " view " + (i+1);
-    t.addEventListener("click", () => {
-      mainImg.src = src;
-      mainImg.dataset.idx = i;
-      thumbRow.querySelectorAll(".thumb").forEach(el => el.classList.remove("active"));
-      t.classList.add("active");
-    });
+    t.addEventListener("click", () => setActive(i));
     thumbRow.appendChild(t);
+    thumbEls.push(t);
   });
   card.appendChild(thumbRow);
+
+  prevArrow.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setActive((currentIdx - 1 + p.images.length) % p.images.length);
+  });
+  nextArrow.addEventListener("click", (e) => {
+    e.stopPropagation();
+    setActive((currentIdx + 1) % p.images.length);
+  });
 
   const body = document.createElement("div");
   body.className = "card-body";
@@ -479,10 +566,22 @@ function buildCard(p, idx){
   itemNo.textContent = "Item #" + p.item;
   body.appendChild(itemNo);
 
+  const priceRow = document.createElement("div");
+  priceRow.className = "price-details-row";
   const price = document.createElement("div");
   price.className = "card-price";
   price.textContent = fmtPrice(p.price);
-  body.appendChild(price);
+  priceRow.appendChild(price);
+  if(p.details){
+    const detailsLink = document.createElement("a");
+    detailsLink.className = "details-link";
+    detailsLink.href = p.details;
+    detailsLink.target = "_blank";
+    detailsLink.rel = "noopener noreferrer";
+    detailsLink.textContent = "DETAILS";
+    priceRow.appendChild(detailsLink);
+  }
+  body.appendChild(priceRow);
 
   let selectedColor = p.colors[0];
   if(p.colors.length > 1){
