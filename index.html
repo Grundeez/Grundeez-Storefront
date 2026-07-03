@@ -121,13 +121,18 @@
     white-space:nowrap;
   }
   .details-link:hover{color:var(--purple-dark);}
-  .swatch-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:4px 0;}
-  .swatch{
-    width:22px; height:22px; border-radius:50%; border:2px solid #fff;
-    box-shadow:0 0 0 1px #ccc; cursor:pointer; position:relative;
+  .color-select-wrap{margin:4px 0;}
+  .color-select-label{font-size:0.78rem; color:#6a5a76; display:block; margin-bottom:4px;}
+  .color-select{
+    width:100%; padding:9px 10px; border:1px solid var(--line); border-radius:8px;
+    font-size:0.9rem; font-family:inherit; background:#fff; color:var(--ink);
   }
-  .swatch.selected{box-shadow:0 0 0 2px var(--purple);}
-  .swatch-label{font-size:0.78rem; color:#6a5a76; min-width:100%; margin-bottom:-2px;}
+  .color-select.error{border-color:#c0392b; box-shadow:0 0 0 2px rgba(192,57,43,0.15);}
+  .color-select-warning{
+    font-size:0.78rem; color:#c0392b; margin-top:4px; display:none;
+  }
+  .color-select-warning.show{display:block;}
+  .single-color-note{font-size:0.85rem; color:#6a5a76; margin:4px 0;}
   .qty-row{display:flex; align-items:center; gap:10px; margin-top:auto;}
   .qty-row label{font-size:0.85rem; color:#6a5a76;}
   .qty-row input{
@@ -601,29 +606,48 @@ function buildCard(p, idx){
   }
   body.appendChild(priceRow);
 
-  let selectedColor = p.colors[0];
+  let colorSelectEl = null;
+  let colorWarningEl = null;
   if(p.colors.length > 1){
-    const label = document.createElement("div");
-    label.className = "swatch-label";
-    label.textContent = "Color: " + selectedColor;
-    body.appendChild(label);
+    const wrap = document.createElement("div");
+    wrap.className = "color-select-wrap";
 
-    const swatchRow = document.createElement("div");
-    swatchRow.className = "swatch-row";
-    p.colors.forEach((c, i) => {
-      const sw = document.createElement("div");
-      sw.className = "swatch" + (i === 0 ? " selected" : "");
-      sw.title = c;
-      sw.style.background = COLOR_MAP[c] || "#ccc";
-      sw.addEventListener("click", () => {
-        selectedColor = c;
-        label.textContent = "Color: " + c;
-        swatchRow.querySelectorAll(".swatch").forEach(el => el.classList.remove("selected"));
-        sw.classList.add("selected");
-      });
-      swatchRow.appendChild(sw);
+    const label = document.createElement("label");
+    label.className = "color-select-label";
+    label.textContent = "Color:";
+    wrap.appendChild(label);
+
+    colorSelectEl = document.createElement("select");
+    colorSelectEl.className = "color-select";
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "-- Select a color --";
+    placeholder.disabled = true;
+    placeholder.selected = true;
+    colorSelectEl.appendChild(placeholder);
+    p.colors.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      opt.textContent = c;
+      colorSelectEl.appendChild(opt);
     });
-    body.appendChild(swatchRow);
+    colorSelectEl.addEventListener("change", () => {
+      colorSelectEl.classList.remove("error");
+      colorWarningEl.classList.remove("show");
+    });
+    wrap.appendChild(colorSelectEl);
+
+    colorWarningEl = document.createElement("div");
+    colorWarningEl.className = "color-select-warning";
+    colorWarningEl.textContent = "Please select a color before adding to cart.";
+    wrap.appendChild(colorWarningEl);
+
+    body.appendChild(wrap);
+  } else {
+    const note = document.createElement("div");
+    note.className = "single-color-note";
+    note.textContent = "Color: " + p.colors[0];
+    body.appendChild(note);
   }
 
   const qtyRow = document.createElement("div");
@@ -642,8 +666,18 @@ function buildCard(p, idx){
   addBtn.className = "add-btn";
   addBtn.textContent = "Add to Cart";
   addBtn.addEventListener("click", () => {
+    let chosenColor = p.colors[0];
+    if(colorSelectEl){
+      if(!colorSelectEl.value){
+        colorSelectEl.classList.add("error");
+        colorWarningEl.classList.add("show");
+        colorSelectEl.focus();
+        return;
+      }
+      chosenColor = colorSelectEl.value;
+    }
     const qty = Math.max(1, parseInt(qtyInput.value) || 1);
-    addToCart(p, selectedColor, qty, mainImg.src);
+    addToCart(p, chosenColor, qty, mainImg.src);
     addBtn.textContent = "Added ✓";
     addBtn.classList.add("added");
     setTimeout(() => {
